@@ -38,7 +38,7 @@ export function MainApp({ user, onLogout }: MainAppProps) {
               <Package size={26} weight="bold" />
             </div>
             <div>
-              <h1 className="text-xl font-bold tracking-tight">Cargo Tracking</h1>
+              <h1 className="text-xl font-bold tracking-tight">Next Cargo</h1>
               <p className="text-xs text-muted-foreground">
                 {user.firstName} {user.lastName}
               </p>

@@ -135,7 +135,7 @@ export function AuthScreen({ onLogin }: AuthScreenProps) {
               <Package size={36} weight="bold" />
             </div>
           </div>
-          <CardTitle className="text-3xl font-bold tracking-tight">Cargo Tracking</CardTitle>
+          <CardTitle className="text-3xl font-bold tracking-tight">Next Cargo</CardTitle>
           <CardDescription className="text-base">Система отслеживания грузов</CardDescription>
         </CardHeader>
         <CardContent>
