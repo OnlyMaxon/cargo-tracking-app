@@ -1,6 +1,6 @@
 import { Alert, AlertTitle, AlertDescription } from "./components/ui/alert";
 import { Button } from "./components/ui/button";
-import { AlertTriangleIcon, RefreshCwIcon } from "lucide-react";
+import { Warning, ArrowClockwise } from "@phosphor-icons/react";
 
 interface ErrorFallbackProps {
   error: Error;
@@ -11,19 +11,19 @@ export const ErrorFallback = ({ error, resetErrorBoundary }: ErrorFallbackProps)
   if (import.meta.env.DEV) throw error;
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <Alert variant="destructive" className="mb-6">
-          <AlertTriangleIcon />
-          <AlertTitle>This spark has encountered a runtime error</AlertTitle>
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 flex items-center justify-center p-4">
+      <div className="w-full max-w-md animate-in fade-in zoom-in duration-500">
+        <Alert variant="destructive" className="mb-6 shadow-lg">
+          <Warning size={20} weight="bold" />
+          <AlertTitle>Произошла ошибка</AlertTitle>
           <AlertDescription>
-            Something unexpected happened while running the application. The error details are shown below. Contact the spark author and let them know about this issue.
+            Что-то пошло не так при работе приложения. Попробуйте перезагрузить страницу или обратитесь в поддержку.
           </AlertDescription>
         </Alert>
         
-        <div className="bg-card border rounded-lg p-4 mb-6">
-          <h3 className="font-semibold text-sm text-muted-foreground mb-2">Error Details:</h3>
-          <pre className="text-xs text-destructive bg-muted/50 p-3 rounded border overflow-auto max-h-32">
+        <div className="bg-card border rounded-lg p-4 mb-6 shadow-sm">
+          <h3 className="font-semibold text-sm text-muted-foreground mb-2">Детали ошибки:</h3>
+          <pre className="text-xs text-destructive bg-muted/50 p-3 rounded border overflow-auto max-h-32 font-mono">
             {error.message}
           </pre>
         </div>
@@ -31,10 +31,10 @@ export const ErrorFallback = ({ error, resetErrorBoundary }: ErrorFallbackProps)
         <Button 
           onClick={resetErrorBoundary} 
           className="w-full"
-          variant="outline"
+          size="lg"
         >
-          <RefreshCwIcon />
-          Try Again
+          <ArrowClockwise size={20} weight="bold" className="mr-2" />
+          Попробовать снова
         </Button>
       </div>
     </div>
