@@ -55,11 +55,18 @@ A comprehensive web-based cargo tracking system for Azerbaijan market with user 
 - **Success criteria**: Links open correctly, list is easily expandable
 
 ### Admin Panel
-- **Functionality**: View all orders, search by FIN, update order status, send notifications
+- **Functionality**: View all orders, search by FIN, create new orders, update order status, send notifications
 - **Purpose**: Order management and customer service operations
 - **Trigger**: Admin user login
-- **Progression**: Admin login → Dashboard with all orders → Search/filter → Select order → Update status → Send notification
-- **Success criteria**: Admin can manage all orders, status updates persist, users receive notifications
+- **Progression**: Admin login → Dashboard with all orders → Search/filter OR Click "Add Order" → Search users by FIN → Select user → Fill order details → Create order → User sees order in their account
+- **Success criteria**: Admin can manage all orders, create orders for users by FIN search, status updates persist, users receive notifications
+
+### Admin Order Creation
+- **Functionality**: Search for users by FIN code and add new orders to their account
+- **Purpose**: Enable admins to add cargo orders for customers
+- **Trigger**: Click "Add Order" button in admin panel
+- **Progression**: Click button → Dialog opens → Search users by FIN/name → Select user → Enter order details (tracking number, title, description, weight, route, status) → Submit → Order appears in user's account
+- **Success criteria**: Admin can find users by FIN code, create orders with all required information, user receives notification about new order
 
 ## Edge Case Handling
 - **Invalid FIN format**: Show inline validation error with format example (7 chars alphanumeric)

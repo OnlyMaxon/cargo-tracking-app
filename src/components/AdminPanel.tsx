@@ -9,8 +9,9 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { getStatusLabel, getStatusColor, formatDate, generateId } from '@/lib/validators'
 import { FirebaseService } from '@/lib/firebaseService'
-import { MagnifyingGlass, Bell, Package } from '@phosphor-icons/react'
+import { MagnifyingGlass, Bell, Package, Plus } from '@phosphor-icons/react'
 import { toast } from 'sonner'
+import { AddOrderDialog } from '@/components/AddOrderDialog'
 
 export function AdminPanel() {
   const [orders, setOrders] = useState<Order[]>([])
@@ -18,6 +19,7 @@ export function AdminPanel() {
   const [searchFIN, setSearchFIN] = useState('')
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
+  const [addOrderDialogOpen, setAddOrderDialogOpen] = useState(false)
 
   useEffect(() => {
     loadData()
@@ -124,7 +126,13 @@ export function AdminPanel() {
     <div className="p-4 max-w-7xl mx-auto space-y-4 animate-in fade-in duration-500">
       <Card className="shadow-md">
         <CardHeader className="bg-gradient-to-r from-primary/5 to-accent/5">
-          <CardTitle className="text-2xl font-bold tracking-tight">Панель администратора</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-2xl font-bold tracking-tight">Панель администратора</CardTitle>
+            <Button onClick={() => setAddOrderDialogOpen(true)} className="gap-2">
+              <Plus size={20} weight="bold" />
+              Добавить заказ
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="flex gap-2">
@@ -151,6 +159,12 @@ export function AdminPanel() {
           </div>
         </CardContent>
       </Card>
+
+      <AddOrderDialog 
+        open={addOrderDialogOpen}
+        onOpenChange={setAddOrderDialogOpen}
+        onOrderAdded={loadData}
+      />
 
       <ScrollArea className="h-[calc(100vh-280px)]">
         <div className="space-y-3">

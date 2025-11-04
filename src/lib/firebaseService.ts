@@ -25,6 +25,12 @@ export const FirebaseService = {
       return users
     },
 
+    async getAllNonAdmin(): Promise<User[]> {
+      const q = query(collection(db, 'users'), where('isAdmin', '==', false))
+      const snapshot = await getDocs(q)
+      return snapshot.docs.map(doc => doc.data() as User)
+    },
+
     async getById(userId: string): Promise<User | null> {
       const docRef = doc(db, 'users', userId)
       const docSnap = await getDoc(docRef)
@@ -36,6 +42,23 @@ export const FirebaseService = {
       const snapshot = await getDocs(q)
       if (snapshot.empty) return null
       return snapshot.docs[0].data() as User
+    },
+
+    async searchUsers(searchTerm: string): Promise<User[]> {
+      const allUsersData = await this.getAll()
+      const allUsersArray = Object.values(allUsersData) as User[]
+      const allUsers = allUsersArray.filter(u => !u.isAdmin)
+      
+      if (!searchTerm.trim()) {
+        return allUsers
+      }
+
+      const term = searchTerm.toLowerCase()
+      return allUsers.filter(user => 
+        user.finCode.toLowerCase().includes(term) ||
+        user.firstName.toLowerCase().includes(term) ||
+        user.lastName.toLowerCase().includes(term)
+      )
     },
 
     async create(userId: string, user: User): Promise<void> {
