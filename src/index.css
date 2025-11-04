@@ -1,1 +1,8 @@
-/* This is where custom CSS goes */
+* {
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
