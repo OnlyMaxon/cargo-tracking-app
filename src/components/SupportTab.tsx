@@ -5,11 +5,11 @@ import { Button } from '@/components/ui/button'
 
 export function SupportTab() {
   return (
-    <div className="p-4 space-y-4 max-w-2xl mx-auto">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <ChatCircle size={24} weight="bold" />
+    <div className="p-4 space-y-4 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
+      <Card className="shadow-md">
+        <CardHeader className="bg-gradient-to-r from-primary/5 to-accent/5">
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            <ChatCircle size={28} weight="bold" />
             Служба поддержки
           </CardTitle>
         </CardHeader>
@@ -18,8 +18,8 @@ export function SupportTab() {
             <div className="flex items-start gap-3">
               <Phone size={24} className="text-primary mt-0.5" weight="bold" />
               <div className="flex-1">
-                <p className="font-semibold">Телефон</p>
-                <a href="tel:+994123456789" className="text-primary hover:underline">
+                <p className="font-semibold mb-1">Телефон</p>
+                <a href="tel:+994123456789" className="text-primary hover:underline font-medium transition-all">
                   +994 (12) 345-67-89
                 </a>
                 <p className="text-sm text-muted-foreground mt-1">
@@ -33,8 +33,8 @@ export function SupportTab() {
             <div className="flex items-start gap-3">
               <EnvelopeSimple size={24} className="text-primary mt-0.5" weight="bold" />
               <div className="flex-1">
-                <p className="font-semibold">Email</p>
-                <a href="mailto:support@cargo.az" className="text-primary hover:underline">
+                <p className="font-semibold mb-1">Email</p>
+                <a href="mailto:support@cargo.az" className="text-primary hover:underline font-medium transition-all">
                   support@cargo.az
                 </a>
                 <p className="text-sm text-muted-foreground mt-1">

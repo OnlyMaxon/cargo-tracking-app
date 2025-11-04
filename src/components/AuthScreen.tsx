@@ -127,16 +127,16 @@ export function AuthScreen({ onLogin }: AuthScreenProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-accent/5 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-lg">
-        <CardHeader className="space-y-2 text-center">
-          <div className="flex justify-center mb-2">
-            <div className="bg-primary text-primary-foreground p-3 rounded-xl">
-              <Package size={32} weight="bold" />
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-xl border-2 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <CardHeader className="space-y-2 text-center pb-6">
+          <div className="flex justify-center mb-3">
+            <div className="bg-primary text-primary-foreground p-4 rounded-2xl shadow-lg animate-in zoom-in duration-500 delay-150">
+              <Package size={36} weight="bold" />
             </div>
           </div>
-          <CardTitle className="text-3xl font-bold">Cargo Tracking</CardTitle>
-          <CardDescription>Система отслеживания грузов</CardDescription>
+          <CardTitle className="text-3xl font-bold tracking-tight">Cargo Tracking</CardTitle>
+          <CardDescription className="text-base">Система отслеживания грузов</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">

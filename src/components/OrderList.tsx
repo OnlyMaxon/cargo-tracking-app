@@ -61,14 +61,16 @@ export function OrderList({ userId }: OrderListProps) {
 
   if (orders.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <Card className="max-w-md w-full mx-4">
-          <CardContent className="pt-6 text-center space-y-4">
-            <Package size={64} className="mx-auto text-muted-foreground" />
+      <div className="flex items-center justify-center h-full p-4">
+        <Card className="max-w-md w-full mx-4 animate-in fade-in zoom-in duration-500">
+          <CardContent className="pt-8 pb-6 text-center space-y-4">
+            <div className="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto">
+              <Package size={48} className="text-primary" weight="bold" />
+            </div>
             <div className="space-y-2">
               <h3 className="text-xl font-semibold">Нет заказов</h3>
-              <p className="text-muted-foreground">
-                У вас пока нет отслеживаемых посылок. Заказы появятся здесь после добавления.
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                У вас пока нет отслеживаемых посылок. Заказы появятся здесь после добавления администратором.
               </p>
             </div>
           </CardContent>
@@ -80,25 +82,26 @@ export function OrderList({ userId }: OrderListProps) {
   return (
     <>
       <ScrollArea className="h-full">
-        <div className="p-4 space-y-3">
-          {orders.map((order) => (
+        <div className="p-4 space-y-3 animate-in fade-in duration-500">
+          {orders.map((order, index) => (
             <Card
               key={order.id}
-              className="cursor-pointer hover:shadow-md transition-shadow"
+              className="cursor-pointer hover:shadow-lg hover:border-primary/20 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] animate-in slide-in-from-bottom-2 fade-in"
+              style={{ animationDelay: `${index * 50}ms` }}
               onClick={() => setSelectedOrder(order)}
             >
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-start gap-3 flex-1 min-w-0">
-                    <div className="mt-0.5">{getStatusIcon(order.status)}</div>
+                    <div className="mt-0.5 text-primary">{getStatusIcon(order.status)}</div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-base truncate">{order.title}</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <h3 className="font-semibold text-base truncate leading-tight">{order.title}</h3>
+                      <p className="text-sm text-muted-foreground font-mono mt-1">
                         {order.trackingNumber}
                       </p>
                     </div>
                   </div>
-                  <Badge className={`${getStatusColor(order.status)} shrink-0 text-xs font-semibold uppercase tracking-wide`}>
+                  <Badge className={`${getStatusColor(order.status)} shrink-0 text-xs font-bold uppercase tracking-wide px-2.5 py-1`}>
                     {getStatusLabel(order.status)}
                   </Badge>
                 </div>

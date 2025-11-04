@@ -53,20 +53,21 @@ export function AppsTab() {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 animate-in fade-in duration-500">
       <div className="max-w-4xl mx-auto">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold mb-2">Магазины для заказов</h2>
+          <h2 className="text-2xl font-bold mb-2 tracking-tight">Магазины для заказов</h2>
           <p className="text-muted-foreground">
             Популярные интернет-магазины для совершения покупок
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {shoppingApps.map((app) => (
+          {shoppingApps.map((app, index) => (
             <Card
               key={app.id}
-              className="cursor-pointer hover:shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="cursor-pointer hover:shadow-xl hover:border-primary/30 transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] animate-in slide-in-from-bottom-2 fade-in"
+              style={{ animationDelay: `${index * 75}ms` }}
               onClick={() => handleAppClick(app.url)}
             >
               <CardContent className="p-5">
@@ -85,9 +86,9 @@ export function AppsTab() {
           ))}
         </div>
 
-        <div className="mt-8 p-4 bg-muted rounded-lg">
-          <p className="text-sm text-muted-foreground text-center">
-            💡 Совет: После оформления заказа, передайте трек-номер нашему оператору для отслеживания посылки
+        <div className="mt-8 p-5 bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl border border-primary/20">
+          <p className="text-sm text-foreground text-center font-medium">
+            💡 <span className="font-semibold">Совет:</span> После оформления заказа, передайте трек-номер нашему оператору для отслеживания посылки
           </p>
         </div>
       </div>

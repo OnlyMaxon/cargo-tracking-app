@@ -14,12 +14,12 @@ export function ProfileTab({ user, onLogout }: ProfileTabProps) {
   const initials = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
 
   return (
-    <div className="p-4 space-y-4 max-w-2xl mx-auto">
-      <Card>
-        <CardHeader className="text-center">
-          <div className="flex flex-col items-center gap-4">
-            <Avatar className="w-20 h-20">
-              <AvatarFallback className="text-2xl font-bold bg-primary text-primary-foreground">
+    <div className="p-4 space-y-4 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
+      <Card className="overflow-hidden">
+        <CardHeader className="text-center bg-gradient-to-b from-primary/5 to-transparent">
+          <div className="flex flex-col items-center gap-4 pt-4">
+            <Avatar className="w-24 h-24 border-4 border-background shadow-xl">
+              <AvatarFallback className="text-3xl font-bold bg-primary text-primary-foreground">
                 {initials}
               </AvatarFallback>
             </Avatar>

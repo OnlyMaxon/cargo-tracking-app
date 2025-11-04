@@ -34,6 +34,35 @@ export function getStatusColor(status: string): string {
 }
 
 export function formatDate(timestamp: number): string {
+  const date = new Date(timestamp)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+  if (diffDays === 0) {
+    return date.toLocaleTimeString('ru-RU', {
+      hour: '2-digit',
+      minute: '2-digit'
+    }) + ' (сегодня)'
+  } else if (diffDays === 1) {
+    return 'Вчера, ' + date.toLocaleTimeString('ru-RU', {
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  } else if (diffDays < 7) {
+    return `${diffDays} дн. назад`
+  } else {
+    return date.toLocaleDateString('ru-RU', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  }
+}
+
+export function formatDateFull(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString('ru-RU', {
     year: 'numeric',
     month: 'long',

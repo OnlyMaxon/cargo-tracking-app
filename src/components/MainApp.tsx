@@ -31,21 +31,21 @@ export function MainApp({ user, onLogout }: MainAppProps) {
 
   return (
     <div className="h-screen flex flex-col bg-background">
-      <header className="border-b bg-card">
-        <div className="px-4 py-3 flex items-center justify-between">
+      <header className="border-b bg-card shadow-sm">
+        <div className="px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="bg-primary text-primary-foreground p-2 rounded-lg">
-              <Package size={24} weight="bold" />
+            <div className="bg-primary text-primary-foreground p-2.5 rounded-xl shadow-md">
+              <Package size={26} weight="bold" />
             </div>
             <div>
-              <h1 className="text-xl font-bold">Cargo Tracking</h1>
+              <h1 className="text-xl font-bold tracking-tight">Cargo Tracking</h1>
               <p className="text-xs text-muted-foreground">
                 {user.firstName} {user.lastName}
               </p>
             </div>
           </div>
           {user.isAdmin && (
-            <div className="flex items-center gap-2 px-3 py-1 bg-accent/20 text-accent rounded-full text-xs font-semibold">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-accent/20 text-accent rounded-full text-xs font-semibold border border-accent/30">
               <ShieldCheck size={16} weight="bold" />
               ADMIN
             </div>
@@ -55,31 +55,31 @@ export function MainApp({ user, onLogout }: MainAppProps) {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
         <div className="flex-1 overflow-hidden">
-          <TabsContent value="orders" className="h-full m-0">
+          <TabsContent value="orders" className="h-full m-0 animate-in fade-in slide-in-from-bottom-2 duration-300">
             <OrderList userId={user.id} />
           </TabsContent>
 
-          <TabsContent value="support" className="h-full m-0 overflow-auto">
+          <TabsContent value="support" className="h-full m-0 overflow-auto animate-in fade-in slide-in-from-bottom-2 duration-300">
             <SupportTab />
           </TabsContent>
 
-          <TabsContent value="profile" className="h-full m-0 overflow-auto">
+          <TabsContent value="profile" className="h-full m-0 overflow-auto animate-in fade-in slide-in-from-bottom-2 duration-300">
             <ProfileTab user={user} onLogout={onLogout} />
           </TabsContent>
 
-          <TabsContent value="apps" className="h-full m-0 overflow-auto">
+          <TabsContent value="apps" className="h-full m-0 overflow-auto animate-in fade-in slide-in-from-bottom-2 duration-300">
             <AppsTab />
           </TabsContent>
 
           {user.isAdmin && (
-            <TabsContent value="admin" className="h-full m-0">
+            <TabsContent value="admin" className="h-full m-0 animate-in fade-in slide-in-from-bottom-2 duration-300">
               <AdminPanel />
             </TabsContent>
           )}
         </div>
 
-        <nav className="border-t bg-card">
-          <div className="flex items-center justify-around px-2 py-2">
+        <nav className="border-t bg-card shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+          <div className="flex items-center justify-around px-2 py-2.5">
             {tabs.map((tab) => {
               const Icon = tab.icon
               const isActive = activeTab === tab.id
@@ -89,12 +89,16 @@ export function MainApp({ user, onLogout }: MainAppProps) {
                   key={tab.id}
                   variant="ghost"
                   className={cn(
-                    'flex-1 flex flex-col items-center gap-1 h-auto py-2 px-2',
-                    isActive && 'text-primary bg-primary/10'
+                    'flex-1 flex flex-col items-center gap-1.5 h-auto py-2.5 px-2 transition-all duration-300',
+                    isActive && 'text-primary bg-primary/10 scale-105'
                   )}
                   onClick={() => setActiveTab(tab.id)}
                 >
-                  <Icon size={22} weight={isActive ? 'fill' : 'regular'} />
+                  <Icon 
+                    size={24} 
+                    weight={isActive ? 'fill' : 'regular'} 
+                    className="transition-transform duration-200"
+                  />
                   <span className="text-xs font-medium">{tab.label}</span>
                 </Button>
               )

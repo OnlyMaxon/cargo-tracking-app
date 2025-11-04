@@ -120,10 +120,10 @@ export function AdminPanel() {
   }
 
   return (
-    <div className="p-4 max-w-7xl mx-auto space-y-4">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">Панель администратора</CardTitle>
+    <div className="p-4 max-w-7xl mx-auto space-y-4 animate-in fade-in duration-500">
+      <Card className="shadow-md">
+        <CardHeader className="bg-gradient-to-r from-primary/5 to-accent/5">
+          <CardTitle className="text-2xl font-bold tracking-tight">Панель администратора</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex gap-2">
@@ -153,8 +153,12 @@ export function AdminPanel() {
 
       <ScrollArea className="h-[calc(100vh-280px)]">
         <div className="space-y-3">
-          {filteredOrders.map((order) => (
-            <Card key={order.id}>
+          {filteredOrders.map((order, index) => (
+            <Card 
+              key={order.id}
+              className="animate-in slide-in-from-bottom-2 fade-in hover:shadow-md transition-shadow duration-200"
+              style={{ animationDelay: `${index * 30}ms` }}
+            >
               <CardContent className="pt-6">
                 <div className="flex flex-col lg:flex-row gap-4">
                   <div className="flex-1 space-y-3">
@@ -192,20 +196,20 @@ export function AdminPanel() {
 
                   <div className="lg:w-80 space-y-3">
                     <div>
-                      <label className="text-sm font-medium mb-2 block">
+                      <label className="text-sm font-semibold mb-2 block text-foreground">
                         Изменить статус
                       </label>
                       <Select
                         value={order.status}
                         onValueChange={(value) => updateOrderStatus(order.id, value as OrderStatus)}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="font-medium">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="in-transit">В пути</SelectItem>
-                          <SelectItem value="warehouse">На складе</SelectItem>
-                          <SelectItem value="delivered">Доставлен</SelectItem>
+                          <SelectItem value="in-transit" className="font-medium">🚚 В пути</SelectItem>
+                          <SelectItem value="warehouse" className="font-medium">📦 На складе</SelectItem>
+                          <SelectItem value="delivered" className="font-medium">✅ Доставлен</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
