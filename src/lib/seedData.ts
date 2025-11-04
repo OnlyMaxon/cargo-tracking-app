@@ -1,9 +1,10 @@
 import { Order, User, OrderStatus } from '@/types'
 import { generateId } from './validators'
+import { FirebaseService } from './firebaseService'
 
 export async function seedDemoData() {
   try {
-    const users = (await window.spark.kv.get<Record<string, User>>('users')) || {}
+    const users = await FirebaseService.users.getAll()
     
     if (Object.keys(users).length === 0) {
       const adminId = generateId()
@@ -15,17 +16,13 @@ export async function seedDemoData() {
         isAdmin: true
       }
       
-      users[adminId] = admin
-      await window.spark.kv.set('users', users)
-      
-      const passwords = (await window.spark.kv.get<Record<string, string>>('passwords')) || {}
-      passwords[adminId] = 'admin123'
-      await window.spark.kv.set('passwords', passwords)
+      await FirebaseService.users.create(adminId, admin)
+      await FirebaseService.passwords.set(adminId, 'admin123')
 
       console.log('✅ Demo admin created: FIN: ADMIN01, Password: admin123')
     }
 
-    const orders = (await window.spark.kv.get<Record<string, Order>>('orders')) || {}
+    const orders = await FirebaseService.orders.getAll()
     
     if (Object.keys(orders).length === 0 && Object.keys(users).length > 0) {
       const userId = Object.keys(users)[0]
@@ -85,11 +82,10 @@ export async function seedDemoData() {
         }
       ]
 
-      demoOrders.forEach(order => {
-        orders[order.id] = order
-      })
+      for (const order of demoOrders) {
+        await FirebaseService.orders.create(order.id, order)
+      }
 
-      await window.spark.kv.set('orders', orders)
       console.log('✅ Demo orders created')
     }
 

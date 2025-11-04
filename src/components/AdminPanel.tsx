@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { getStatusLabel, getStatusColor, formatDate, generateId } from '@/lib/validators'
+import { FirebaseService } from '@/lib/firebaseService'
 import { MagnifyingGlass, Bell, Package } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 
@@ -36,8 +37,8 @@ export function AdminPanel() {
 
   const loadData = async () => {
     try {
-      const allOrders = (await window.spark.kv.get<Record<string, Order>>('orders')) || {}
-      const allUsers = (await window.spark.kv.get<Record<string, User>>('users')) || {}
+      const allOrders = await FirebaseService.orders.getAll()
+      const allUsers = await FirebaseService.users.getAll()
       
       const orderList = Object.values(allOrders).sort((a, b) => b.updatedAt - a.updatedAt)
       setOrders(orderList)
@@ -53,8 +54,7 @@ export function AdminPanel() {
 
   const updateOrderStatus = async (orderId: string, newStatus: OrderStatus, note?: string) => {
     try {
-      const allOrders = (await window.spark.kv.get<Record<string, Order>>('orders')) || {}
-      const order = allOrders[orderId]
+      const order = await FirebaseService.orders.getById(orderId)
       
       if (!order) {
         toast.error('Заказ не найден')
@@ -62,16 +62,20 @@ export function AdminPanel() {
       }
 
       const now = Date.now()
-      order.status = newStatus
-      order.updatedAt = now
-      order.statusHistory.push({
-        status: newStatus,
-        timestamp: now,
-        note
-      })
+      const updatedStatusHistory = [
+        ...order.statusHistory,
+        {
+          status: newStatus,
+          timestamp: now,
+          note
+        }
+      ]
 
-      allOrders[orderId] = order
-      await window.spark.kv.set('orders', allOrders)
+      await FirebaseService.orders.update(orderId, {
+        status: newStatus,
+        updatedAt: now,
+        statusHistory: updatedStatusHistory
+      })
 
       await sendNotification(order.userId, orderId, `Статус заказа изменен: ${getStatusLabel(newStatus)}`)
 
@@ -85,19 +89,16 @@ export function AdminPanel() {
 
   const sendNotification = async (userId: string, orderId: string, message: string) => {
     try {
-      const notifications = (await window.spark.kv.get<Record<string, any>>('notifications')) || {}
       const notifId = generateId()
       
-      notifications[notifId] = {
+      await FirebaseService.notifications.create(notifId, {
         id: notifId,
         userId,
         orderId,
         message,
         read: false,
         createdAt: Date.now()
-      }
-
-      await window.spark.kv.set('notifications', notifications)
+      })
     } catch (err) {
       console.error('Failed to send notification:', err)
     }

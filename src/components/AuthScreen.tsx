@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { validateFIN, validatePassword, validateName, formatFIN, generateId } from '@/lib/validators'
 import { User } from '@/types'
+import { FirebaseService } from '@/lib/firebaseService'
 import { Package } from '@phosphor-icons/react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 
@@ -41,8 +42,7 @@ export function AuthScreen({ onLogin }: AuthScreenProps) {
     }
 
     try {
-      const users = (await window.spark.kv.get<Record<string, User>>('users')) || {}
-      const user = Object.values(users).find(u => u.finCode === loginFIN.toUpperCase())
+      const user = await FirebaseService.users.getByFinCode(loginFIN)
 
       if (!user) {
         setError('Пользователь не найден')
@@ -50,8 +50,8 @@ export function AuthScreen({ onLogin }: AuthScreenProps) {
         return
       }
 
-      const passwords = (await window.spark.kv.get<Record<string, string>>('passwords')) || {}
-      if (passwords[user.id] !== loginPassword) {
+      const password = await FirebaseService.passwords.get(user.id)
+      if (password !== loginPassword) {
         setError('Неверный пароль')
         setLoading(false)
         return
@@ -94,10 +94,9 @@ export function AuthScreen({ onLogin }: AuthScreenProps) {
     }
 
     try {
-      const users = (await window.spark.kv.get<Record<string, User>>('users')) || {}
-      const finExists = Object.values(users).some(u => u.finCode === regFIN.toUpperCase())
+      const existingUser = await FirebaseService.users.getByFinCode(regFIN)
 
-      if (finExists) {
+      if (existingUser) {
         setError('Пользователь с таким FIN кодом уже зарегистрирован')
         setLoading(false)
         return
@@ -112,12 +111,8 @@ export function AuthScreen({ onLogin }: AuthScreenProps) {
         isAdmin: false
       }
 
-      users[userId] = newUser
-      await window.spark.kv.set('users', users)
-
-      const passwords = (await window.spark.kv.get<Record<string, string>>('passwords')) || {}
-      passwords[userId] = regPassword
-      await window.spark.kv.set('passwords', passwords)
+      await FirebaseService.users.create(userId, newUser)
+      await FirebaseService.passwords.set(userId, regPassword)
 
       onLogin(newUser)
     } catch (err) {

@@ -4,6 +4,7 @@ import { AuthScreen } from '@/components/AuthScreen'
 import { MainApp } from '@/components/MainApp'
 import { Toaster } from '@/components/ui/sonner'
 import { seedDemoData } from '@/lib/seedData'
+import { FirebaseService } from '@/lib/firebaseService'
 import { Package } from '@phosphor-icons/react'
 
 function App() {
@@ -18,10 +19,9 @@ function App() {
     try {
       await seedDemoData()
       
-      const sessionUserId = await window.spark.kv.get<string>('currentUserId')
+      const sessionUserId = await FirebaseService.session.getCurrentUserId()
       if (sessionUserId) {
-        const users = (await window.spark.kv.get<Record<string, User>>('users')) || {}
-        const user = users[sessionUserId]
+        const user = await FirebaseService.users.getById(sessionUserId)
         if (user) {
           setCurrentUser(user)
         }
@@ -35,12 +35,12 @@ function App() {
 
   const handleLogin = async (user: User) => {
     setCurrentUser(user)
-    await window.spark.kv.set('currentUserId', user.id)
+    await FirebaseService.session.setCurrentUserId(user.id)
   }
 
   const handleLogout = async () => {
     setCurrentUser(null)
-    await window.spark.kv.delete('currentUserId')
+    await FirebaseService.session.clear()
   }
 
   if (loading) {

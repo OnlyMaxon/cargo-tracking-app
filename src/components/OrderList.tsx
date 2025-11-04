@@ -3,6 +3,7 @@ import { Order } from '@/types'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { getStatusLabel, getStatusColor, formatDate } from '@/lib/validators'
+import { FirebaseService } from '@/lib/firebaseService'
 import { Package, Truck, Warehouse, CheckCircle } from '@phosphor-icons/react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
@@ -23,10 +24,7 @@ export function OrderList({ userId }: OrderListProps) {
 
   const loadOrders = async () => {
     try {
-      const allOrders = (await window.spark.kv.get<Record<string, Order>>('orders')) || {}
-      const userOrders = Object.values(allOrders)
-        .filter(order => order.userId === userId)
-        .sort((a, b) => b.createdAt - a.createdAt)
+      const userOrders = await FirebaseService.orders.getByUserId(userId)
       setOrders(userOrders)
     } catch (err) {
       console.error('Failed to load orders:', err)
