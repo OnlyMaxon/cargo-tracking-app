@@ -9,9 +9,19 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { getStatusLabel, getStatusColor, formatDate, generateId } from '@/lib/validators'
 import { FirebaseService } from '@/lib/firebaseService'
-import { MagnifyingGlass, Bell, Package, Plus } from '@phosphor-icons/react'
+import { MagnifyingGlass, Bell, Package, Plus, Trash } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { AddOrderDialog } from '@/components/AddOrderDialog'
+import { 
+  AlertDialog, 
+  AlertDialogAction, 
+  AlertDialogCancel, 
+  AlertDialogContent, 
+  AlertDialogDescription, 
+  AlertDialogFooter, 
+  AlertDialogHeader, 
+  AlertDialogTitle 
+} from '@/components/ui/alert-dialog'
 
 export function AdminPanel() {
   const [orders, setOrders] = useState<Order[]>([])
@@ -20,6 +30,7 @@ export function AdminPanel() {
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const [addOrderDialogOpen, setAddOrderDialogOpen] = useState(false)
+  const [deleteOrderId, setDeleteOrderId] = useState<string | null>(null)
 
   useEffect(() => {
     loadData()
@@ -103,6 +114,21 @@ export function AdminPanel() {
       })
     } catch (err) {
       console.error('Failed to send notification:', err)
+    }
+  }
+
+  const handleDeleteOrder = async () => {
+    if (!deleteOrderId) return
+
+    try {
+      await FirebaseService.orders.delete(deleteOrderId)
+      toast.success('Заказ успешно удален')
+      loadData()
+    } catch (err) {
+      console.error('Failed to delete order:', err)
+      toast.error('Ошибка удаления заказа')
+    } finally {
+      setDeleteOrderId(null)
     }
   }
 
@@ -242,6 +268,19 @@ export function AdminPanel() {
                       <Bell size={16} className="mr-2" />
                       Отправить уведомление
                     </Button>
+
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="w-full"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setDeleteOrderId(order.id)
+                      }}
+                    >
+                      <Trash size={16} className="mr-2" />
+                      Удалить заказ
+                    </Button>
                   </div>
                 </div>
               </CardContent>
@@ -260,6 +299,23 @@ export function AdminPanel() {
           )}
         </div>
       </ScrollArea>
+
+      <AlertDialog open={!!deleteOrderId} onOpenChange={(open) => !open && setDeleteOrderId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Удалить заказ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Это действие нельзя отменить. Заказ будет удален навсегда из системы.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Отмена</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteOrder} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Удалить
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

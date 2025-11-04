@@ -101,11 +101,11 @@ export const FirebaseService = {
     async getByUserId(userId: string): Promise<Order[]> {
       const q = query(
         collection(db, 'orders'), 
-        where('userId', '==', userId),
-        orderBy('createdAt', 'desc')
+        where('userId', '==', userId)
       )
       const snapshot = await getDocs(q)
-      return snapshot.docs.map(doc => doc.data() as Order)
+      const orders = snapshot.docs.map(doc => doc.data() as Order)
+      return orders.sort((a, b) => b.createdAt - a.createdAt)
     },
 
     async create(orderId: string, order: Order): Promise<void> {
@@ -125,11 +125,11 @@ export const FirebaseService = {
     async getByUserId(userId: string): Promise<Notification[]> {
       const q = query(
         collection(db, 'notifications'),
-        where('userId', '==', userId),
-        orderBy('createdAt', 'desc')
+        where('userId', '==', userId)
       )
       const snapshot = await getDocs(q)
-      return snapshot.docs.map(doc => doc.data() as Notification)
+      const notifications = snapshot.docs.map(doc => doc.data() as Notification)
+      return notifications.sort((a, b) => b.createdAt - a.createdAt)
     },
 
     async create(notificationId: string, notification: Notification): Promise<void> {

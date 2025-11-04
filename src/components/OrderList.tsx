@@ -20,6 +20,12 @@ export function OrderList({ userId }: OrderListProps) {
 
   useEffect(() => {
     loadOrders()
+    
+    const interval = setInterval(() => {
+      loadOrders()
+    }, 5000)
+
+    return () => clearInterval(interval)
   }, [userId])
 
   const loadOrders = async () => {
